@@ -1,0 +1,37 @@
+<div class="dashboard-container">
+  <h1>Tableau de Bord - Irrigation Intelligente</h1>
+
+  <div *ngIf="loading" class="loading">
+    <p>Chargement des données...</p>
+  </div>
+
+  <div *ngIf="!loading" class="dashboard-grid">
+    <div class="stat-card">
+      <h3>{{ stats.totalCapteurs }}</h3>
+      <p>Capteurs Total</p>
+    </div>
+
+    <div class="stat-card">
+      <h3>{{ stats.capteursActifs }}</h3>
+      <p>Capteurs Actifs</p>
+    </div>
+
+    <div class="stat-card">
+      <h3>{{ stats.totalObservations }}</h3>
+      <p>Observations</p>
+    </div>
+
+    <div class="stat-card">
+      <h3>{{ stats.totalRecommandations }}</h3>
+      <p>Recommandations</p>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="!loading">
+    <h2>Bienvenue</h2>
+    <p>Ce système permet de gérer l'irrigation de manière optimisée grâce à l'analyse des données des capteurs IoT.</p>
+    <div class="alert alert-info">
+      <strong>Info:</strong> Consultez les différentes sections pour gérer vos capteurs, visualiser les observations et consulter les recommandations d'irrigation.
+    </div>
+  </div>
+</div>

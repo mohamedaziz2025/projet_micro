@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservice-collecte
+  labels:
+    app: microservice-collecte
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: microservice-collecte
+  template:
+    metadata:
+      labels:
+        app: microservice-collecte
+    spec:
+      containers:
+      - name: microservice-collecte
+        image: irrigation/microservice-collecte:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8081
+        env:
+        - name: SPRING_CONFIG_IMPORT
+          valueFrom:
+            configMapKeyRef:
+              name: irrigation-config
+              key: CONFIG_SERVER_URL
+        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+          valueFrom:
+            configMapKeyRef:
+              name: irrigation-config
+              key: EUREKA_SERVER_URL
+        - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+          valueFrom:
+            configMapKeyRef:
+              name: irrigation-config
+              key: KAFKA_BOOTSTRAP_SERVERS
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservice-collecte
+spec:
+  selector:
+    app: microservice-collecte
+  ports:
+  - protocol: TCP
+    port: 8081
+    targetPort: 8081
+  type: ClusterIP

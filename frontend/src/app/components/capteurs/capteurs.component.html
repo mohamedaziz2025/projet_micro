@@ -1,0 +1,83 @@
+<div class="capteurs-container">
+  <h1>Gestion des Capteurs</h1>
+
+  <div class="actions">
+    <button class="btn btn-primary" (click)="toggleForm()">
+      {{ showForm ? 'Annuler' : 'Nouveau Capteur' }}
+    </button>
+  </div>
+
+  <div class="card" *ngIf="showForm">
+    <h2>{{ editMode ? 'Modifier' : 'Nouveau' }} Capteur</h2>
+    <form (ngSubmit)="saveCapteur()">
+      <div class="form-group">
+        <label>Type de capteur</label>
+        <select [(ngModel)]="capteur.type" name="type" required>
+          <option value="">Sélectionner un type</option>
+          <option value="TEMPERATURE">Température</option>
+          <option value="HUMIDITE">Humidité</option>
+          <option value="PLUVIOMETRIE">Pluviométrie</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Parcelle ID</label>
+        <input type="number" [(ngModel)]="capteur.parcelleId" name="parcelleId" required>
+      </div>
+
+      <div class="form-group">
+        <label>Localisation</label>
+        <input type="text" [(ngModel)]="capteur.localisation" name="localisation" required>
+      </div>
+
+      <div class="form-group">
+        <label>
+          <input type="checkbox" [(ngModel)]="capteur.actif" name="actif">
+          Actif
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn-success">Enregistrer</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Liste des Capteurs</h2>
+    
+    <div *ngIf="loading" class="loading">Chargement...</div>
+
+    <table *ngIf="!loading && capteurs.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Type</th>
+          <th>Parcelle</th>
+          <th>Localisation</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let capteur of capteurs">
+          <td>{{ capteur.id }}</td>
+          <td>{{ capteur.type }}</td>
+          <td>{{ capteur.parcelleId }}</td>
+          <td>{{ capteur.localisation }}</td>
+          <td>
+            <span [class]="capteur.actif ? 'badge badge-success' : 'badge badge-danger'">
+              {{ capteur.actif ? 'Actif' : 'Inactif' }}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-primary" (click)="editCapteur(capteur)">Modifier</button>
+            <button class="btn btn-danger" (click)="deleteCapteur(capteur.id!)">Supprimer</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="!loading && capteurs.length === 0" class="alert alert-info">
+      Aucun capteur trouvé. Créez votre premier capteur.
+    </div>
+  </div>
+</div>

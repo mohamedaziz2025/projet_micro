@@ -1,0 +1,49 @@
+<div class="recommandations-container">
+  <h1>Recommandations d'Irrigation</h1>
+
+  <div class="card">
+    <h2>Générer une Recommandation</h2>
+    <div class="form-group">
+      <label>Parcelle ID</label>
+      <input type="number" [(ngModel)]="parcelleId" name="parcelleId">
+      <button 
+        class="btn btn-success" 
+        (click)="genererRecommandation()"
+        [disabled]="generationInProgress">
+        {{ generationInProgress ? 'Génération en cours...' : 'Générer' }}
+      </button>
+    </div>
+    <div class="alert alert-warning">
+      <strong>Note:</strong> Assurez-vous qu'il existe des observations récentes pour cette parcelle.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Liste des Recommandations</h2>
+    
+    <div *ngIf="loading" class="loading">Chargement...</div>
+
+    <div *ngIf="!loading && recommandations.length > 0" class="recommandations-list">
+      <div *ngFor="let rec of recommandations" class="recommandation-card">
+        <div class="recommandation-header">
+          <h3>Parcelle {{ rec.parcelleId }}</h3>
+          <span [class]="'badge ' + getUrgenceClass(rec.urgence)">
+            {{ rec.urgence }}
+          </span>
+        </div>
+        <div class="recommandation-body">
+          <p><strong>Quantité d'eau recommandée:</strong> {{ rec.quantiteEau }} mm</p>
+          <p><strong>Justification:</strong> {{ rec.justification }}</p>
+          <p><strong>Date de calcul:</strong> {{ rec.dateCalcul | date:'dd/MM/yyyy HH:mm' }}</p>
+          <p *ngIf="rec.confianceScore">
+            <strong>Score de confiance:</strong> {{ (rec.confianceScore * 100).toFixed(0) }}%
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!loading && recommandations.length === 0" class="alert alert-info">
+      Aucune recommandation trouvée. Générez votre première recommandation.
+    </div>
+  </div>
+</div>
