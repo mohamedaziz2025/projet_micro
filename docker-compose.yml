@@ -54,7 +54,7 @@ services:
     container_name: eureka-server
     depends_on:
       config-server:
-        condition: service_started
+        condition: service_healthy
     ports:
       - "8761:8761"
     environment:
