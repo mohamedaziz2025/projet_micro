@@ -38,7 +38,7 @@ services:
     ports:
       - "8888:8888"
     environment:
-      SPRING_CLOUD_CONFIG_SERVER_GIT_URI: https://gitlab.com/azizbenhassine270/config-repo.git
+      SPRING_PROFILES_ACTIVE: native
     volumes:
       - ./config-repo:/app/config-repo
     networks:
