@@ -54,7 +54,7 @@ services:
     container_name: eureka-server
     depends_on:
       config-server:
-        condition: service_healthy
+        condition: service_started
     ports:
       - "8761:8761"
     environment:
@@ -71,13 +71,14 @@ services:
   api-gateway:
     build: ./backend/api-gateway
     container_name: api-gateway
-   
-  
+    depends_on:
+      eureka-server:
+        condition: service_started
     ports:
       - "8080:8080"
     environment:
-      SPRING_CONFIG_IMPORT: configserver:http://35.180.138.96:8888
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://35.180.138.96:8761/eureka/
+      SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
     networks:
       - irrigation-network
 
@@ -86,13 +87,15 @@ services:
     build: ./backend/microservice-collecte
     container_name: microservice-collecte
     depends_on:
+      eureka-server:
+        condition: service_started
       kafka:
         condition: service_started
     ports:
       - "8081:8081"
     environment:
-      SPRING_CONFIG_IMPORT: configserver:http://35.180.138.96:8888
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://35.180.138.96/eureka/
+      SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
     networks:
       - irrigation-network
@@ -102,13 +105,15 @@ services:
     build: ./backend/microservice-analyse
     container_name: microservice-analyse
     depends_on:
+      eureka-server:
+        condition: service_started
       kafka:
         condition: service_started
     ports:
       - "8082:8082"
     environment:
-      SPRING_CONFIG_IMPORT: configserver:http://35.180.138.96:8888
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://35.180.138.96:8761/eureka/
+      SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
     networks:
       - irrigation-network
