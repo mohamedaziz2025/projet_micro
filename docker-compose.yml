@@ -39,6 +39,8 @@ services:
       - "8888:8888"
     environment:
       SPRING_CLOUD_CONFIG_SERVER_GIT_URI: https://gitlab.com/azizbenhassine270/config-repo.git
+    volumes:
+      - ./config-repo:/app/config-repo
     networks:
       - irrigation-network
     healthcheck:

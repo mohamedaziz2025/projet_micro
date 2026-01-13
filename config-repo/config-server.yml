@@ -12,7 +12,7 @@ spring:
           default-label: main
           clone-on-start: true
         native:
-          search-locations: file:/app/config-repo
+          search-locations: classpath:/config
 
 management:
   endpoints:
