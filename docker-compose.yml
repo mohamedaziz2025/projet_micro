@@ -71,9 +71,8 @@ services:
   api-gateway:
     build: ./backend/api-gateway
     container_name: api-gateway
-    depends_on:
-      eureka-server:
-        condition: service_healthy
+   
+  
     ports:
       - "8080:8080"
     environment:
@@ -87,8 +86,6 @@ services:
     build: ./backend/microservice-collecte
     container_name: microservice-collecte
     depends_on:
-      eureka-server:
-        condition: service_healthy
       kafka:
         condition: service_started
     ports:
@@ -105,8 +102,6 @@ services:
     build: ./backend/microservice-analyse
     container_name: microservice-analyse
     depends_on:
-      eureka-server:
-        condition: service_healthy
       kafka:
         condition: service_started
     ports:
